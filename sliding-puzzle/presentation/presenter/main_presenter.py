@@ -2,17 +2,21 @@ from core.actions.convert_input_in_list import ConvertInputInList
 from core.actions.create_matrix_from_input import CreateMatrixFromInput
 from core.actions.get_puzzle_solution import GetPuzzleSolution
 from core.actions.print_matrix import PrintMatrix
+import time
 
 
 class MainPresenter:
 
     def on_enter_input(self, input):
+
+        seconds = self.time_now()
         list = ConvertInputInList().execute(input)
         matrix = CreateMatrixFromInput().execute(list)
 
         solution = GetPuzzleSolution().execute(matrix)
 
         self.print_puzzle_solution(solution)
+        self.print_solution_duration(seconds)
 
     def print_puzzle_solution(self, solution):
 
@@ -20,12 +24,12 @@ class MainPresenter:
         movements = []
 
         if solution != None:
-            matrixs.append(solution.get_numbers_matrix())
+            matrixs.append(solution.get_matrix())
             movements.append(solution.get_last_movement())
 
             solution_node_parent = solution.get_node_parent()
             while solution_node_parent != None:
-                matrixs.append(solution_node_parent.get_numbers_matrix())
+                matrixs.append(solution_node_parent.get_matrix())
                 movements.append(solution_node_parent.get_last_movement())
                 solution_node_parent = solution_node_parent.get_node_parent()
 
@@ -48,3 +52,9 @@ class MainPresenter:
         for i in range(1, len(matrixs)):
             print(str(i) + ") Movement: " + movements[i - 1])
             PrintMatrix().execute(matrixs[i])
+
+    def time_now(self):
+        return time.time()
+
+    def print_solution_duration(self, seconds):
+        print("Get solution in %.2f" % (self.time_now() - seconds) + " seconds")

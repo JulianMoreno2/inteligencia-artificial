@@ -11,6 +11,7 @@ class ValidatePuzzle:
             for i in range(position, len(numbers_list)):
                 if number > numbers_list[i] and numbers_list[i] != 0:
                     sum += 1
+
         if sum % 2 == 0:
             return True
         else:
