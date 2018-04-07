@@ -8,41 +8,44 @@ class UpdateMatrix:
         global edited_matrix
 
         if len(matrix) == 3:
-            edited_matrix = [['-1', '-1', '-1'], ['-1', '-1', '-1'], ['-1', '-1', '-1']]
+            edited_matrix = [['-1', '-1', '-1'],
+                             ['-1', '-1', '-1'],
+                             ['-1', '-1', '-1']]
             for i in range(0, 3):
                 for j in range(0, 3):
                     edited_matrix[i][j] = matrix[i][j]
         if len(matrix) == 4:
-            edited_matrix = [['-1', '-1', '-1', '-1'], ['-1', '-1', '-1', '-1'], ['-1', '-1', '-1', '-1'],
+            edited_matrix = [['-1', '-1', '-1', '-1'],
+                             ['-1', '-1', '-1', '-1'],
+                             ['-1', '-1', '-1', '-1'],
                              ['-1', '-1', '-1', '-1']]
             for i in range(0, 4):
                 for j in range(0, 4):
                     edited_matrix[i][j] = matrix[i][j]
 
-        free_position_row = SearchFreePosition().matrix_row(edited_matrix)
-        free_position_column = SearchFreePosition().matrix_column(edited_matrix)
+        free_row = SearchFreePosition().matrix_row(edited_matrix)
+        free_column = SearchFreePosition().matrix_column(edited_matrix)
+
         if movement == 'up':
-            new_free_position_row = free_position_row - 1
-            new_free_position_column = free_position_column
-            aux = edited_matrix[new_free_position_row][new_free_position_column]
-            edited_matrix[new_free_position_row][new_free_position_column] = '0'
-            edited_matrix[free_position_row][free_position_column] = aux
+            new_free_row = free_row - 1
+            new_free_column = free_column
+            self.update(edited_matrix, free_column, free_row, new_free_column, new_free_row)
         elif movement == 'right':
-            new_free_position_row = free_position_row
-            new_free_position_column = free_position_column + 1
-            aux = edited_matrix[new_free_position_row][new_free_position_column]
-            edited_matrix[new_free_position_row][new_free_position_column] = '0'
-            edited_matrix[free_position_row][free_position_column] = aux
+            new_free_row = free_row
+            new_free_column = free_column + 1
+            self.update(edited_matrix, free_column, free_row, new_free_column, new_free_row)
         elif movement == 'down':
-            new_free_position_row = free_position_row + 1
-            new_free_position_column = free_position_column
-            aux = edited_matrix[new_free_position_row][new_free_position_column]
-            edited_matrix[new_free_position_row][new_free_position_column] = '0'
-            edited_matrix[free_position_row][free_position_column] = aux
+            new_free_row = free_row + 1
+            new_free_column = free_column
+            self.update(edited_matrix, free_column, free_row, new_free_column, new_free_row)
         elif movement == 'left':
-            new_free_position_row = free_position_row
-            new_free_position_column = free_position_column - 1
-            aux = edited_matrix[new_free_position_row][new_free_position_column]
-            edited_matrix[new_free_position_row][new_free_position_column] = '0'
-            edited_matrix[free_position_row][free_position_column] = aux
+            new_free_row = free_row
+            new_free_column = free_column - 1
+            self.update(edited_matrix, free_column, free_row, new_free_column, new_free_row)
+
         return edited_matrix
+
+    def update(self, edited_matrix, free_column, free_row, new_free_column, new_free_row):
+        old_value = edited_matrix[new_free_row][new_free_column]
+        edited_matrix[new_free_row][new_free_column] = '0'
+        edited_matrix[free_row][free_column] = old_value

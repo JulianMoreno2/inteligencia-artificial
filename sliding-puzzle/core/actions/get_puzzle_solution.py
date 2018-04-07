@@ -17,12 +17,11 @@ class GetPuzzleSolution:
 
             initial_node = Node(None, matrix, None)
 
-            f_sorted_nodes = {}
             frontier_nodes = []
             explored_nodes[ConvertMatrixToNumber().execute(initial_node.get_numbers_matrix())] = 1
             frontier_nodes.insert(0, initial_node)
 
-            while len(frontier_nodes) > 0 and solution_node == None:
+            while len(frontier_nodes) > 0 and solution_node is None:
 
                 current_node = frontier_nodes.pop()
                 current_node_matrix = current_node.get_numbers_matrix()
@@ -36,13 +35,12 @@ class GetPuzzleSolution:
                         explored_node = False
                         updated_matrix_id = ConvertMatrixToNumber().execute(updated_matrix)
 
-                        if updated_matrix_id in explored_nodes or updated_matrix_id in f_sorted_nodes:
+                        if updated_matrix_id in explored_nodes:
                             explored_node = True
                         if not explored_node:
                             new_node = Node(current_node, updated_matrix, movement)
                             frontier_nodes.insert(0, new_node)
-                            f_sorted_nodes[updated_matrix_id] = 1
                 else:
                     solution_node = current_node
 
-        return [solution_node, explored_nodes]
+        return solution_node
