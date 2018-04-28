@@ -1,3 +1,2 @@
-sum([],0).
-
-sum([X|Xs],T):-sum(Xs,T2),T is T2 + X.
+sum([], 0).
+sum([X|Xs], T):-sum(Xs, T1),T is T1 + X.

@@ -12,4 +12,4 @@ hate(butcher,X):-not(X==butcher),live_in_house(X).
 
 more_reach_than(X,agatha):-not(hate(butcher,X)),live_in_house(X).
 
-murder(X,agatha):-hate(X,agatha),live_in_house(X),not(more_reach_than(X,agatha)).
+murder(X,agatha):-hate(X,agatha),not(more_reach_than(X,agatha)),live_in_house(X).
