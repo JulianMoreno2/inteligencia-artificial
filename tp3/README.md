@@ -37,9 +37,17 @@ pip install h5py
 
 ## Code
 
-The tensorflow version of CNN is inside **CNN_tensorflow_classification.ipynb**.
+The tensorflow version of CNN is inside **CNN-Keras-TensorFlow.ipynb**.
 
-The Keras version is insider **Keras_cnn.ipynb**.
+## Download Images for build custom Dataset
+
+### Use app from https://github.com/hardikvasa/google-images-download
+### Install -> $ pip install google_images_download
+```console
+googleimagesdownload --keywords "oak leaf" --no_numbering  --limit 50 --output_directory "train" --image_directory "oakleaf"
+googleimagesdownload --keywords "olive leaf" --no_numbering  --limit 50 --output_directory "train" --image_directory "oliveleaf"
+googleimagesdownload --keywords "salix leaf" --no_numbering  --limit 50 --output_directory "train" --image_directory "salixleaf"
+```
 
 ## Run
 
@@ -54,3 +62,5 @@ After making sure you have that, you can run from a terminal or cmd next lines (
 - Introduction to Deep Learning [Link to Class 1](https://github.com/jeffheaton/t81_558_deep_learning/blob/master/t81_558_class1_intro_python.ipynb)
 
 - Github repository example [Link to Repository](https://github.com/lucko515/cnn-tensorflow-keras)
+
+- Example 1: https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
