@@ -104,3 +104,10 @@ ENV/
 
 .DS_Store
 */.idea/
+
+#image dataset
+*.jpg
+*.png
+*.gif
+*.jpeg
+*.php
