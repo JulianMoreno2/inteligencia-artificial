@@ -3,11 +3,12 @@ import time
 
 class QLearner:
 
-    def __init__(self, board):
+    def __init__(self, board, action_chooser, alpha):
 
         self.board = board
+        self.action_chooser = action_chooser
+        self.alpha = alpha
         self.board.render_grid()
-        self.discount = 0.3
         self.actions = self.board.get_actions()
         self.states = []
         self.Q = {}
@@ -31,18 +32,22 @@ class QLearner:
         s = self.board.get_player()
         r = -self.board.get_score()
         if action == self.actions[0]:
-            self.board.try_move(0, -1)
+            (dx, dy, new_action) = self.action_chooser.execute(0)
+            self.board.try_move(dx, dy)
         elif action == self.actions[1]:
-            self.board.try_move(0, 1)
+            (dx, dy, new_action) = self.action_chooser.execute(1)
+            self.board.try_move(dx, dy)
         elif action == self.actions[2]:
-            self.board.try_move(-1, 0)
+            (dx, dy, new_action) = self.action_chooser.execute(2)
+            self.board.try_move(dx, dy)
         elif action == self.actions[3]:
-            self.board.try_move(1, 0)
+            (dx, dy, new_action) = self.action_chooser.execute(3)
+            self.board.try_move(dx, dy)
         else:
             return
         s2 = self.board.get_player()
         r += self.board.get_score()
-        return s, action, r, s2
+        return s, new_action, r, s2
 
     def max_Q(self, s):
         val = None
@@ -60,18 +65,19 @@ class QLearner:
 
     def run(self):
         time.sleep(1)
-        alpha = 0.8
         t = 1
         while True:
             # Pick the right action
             s = self.board.get_player()
             max_act, max_val = self.max_Q(s)
             (s, a, r, s2) = self.do_action(max_act)
-            print("Move to: " + str(max_act))
+            print("New score " + str(self.board.score))
+            print("Try Move to: " + str(max_act))
+            print("Move to: " + str(a))
 
             # Update Q
             max_act, max_val = self.max_Q(s2)
-            self.inc_Q(s, a, alpha, r + self.discount * max_val)
+            self.inc_Q(s, a, self.alpha, r * max_val)
 
             # Check if the game has restarted
             t += 1.0
@@ -81,7 +87,7 @@ class QLearner:
                 t = 1.0
 
             # Update the learning rate
-            alpha = pow(t, -0.1)
+            self.alpha = pow(t, -0.1)
 
             # MODIFY THIS SLEEP IF THE GAME IS GOING TOO FAST.
-            time.sleep(0.5)
+            time.sleep(0.1)

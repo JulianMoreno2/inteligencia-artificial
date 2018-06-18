@@ -18,7 +18,7 @@ class Board:
 
         self.board = Canvas(self.master, width=self.x * self.width, height=self.y * self.width)
         self.player = (0, 0)
-        self.score = 1
+        self.score = 0
         self.restart = False
         self.walk_reward = walk_reward
         self.me = None
@@ -64,21 +64,21 @@ class Board:
 
         for i in range(self.x):
             for j in range(self.y):
-                self.board.create_rectangle(i * self.width, j * self.width, (i + 1) * self.width, (j + 1) * self.width,
-                                            fill="white", width=1)
+                self.board.create_rectangle(i * self.width, j * self.width, (i + 1) * self.width, (j + 1) * self.width, fill="white", width=1)
+
+        for (i, j, c, w) in self.specials:
+            self.board.create_rectangle(i * self.width, j * self.width, (i + 1) * self.width, (j + 1) * self.width, fill=c, width=1)
+
+        for i in range(self.x):
+            for j in range(self.y):
                 temp = {}
                 for action in self.actions:
                     temp[action] = self.create_triangle(i, j, action)
                 self.cell_scores[(i, j)] = temp
 
-        for (i, j, c, w) in self.specials:
-            self.board.create_rectangle(i * self.width, j * self.width, (i + 1) * self.width, (j + 1) * self.width,
-                                        fill=c, width=1)
-
     def set_cell_score(self, state, action, val):
         triangle = self.cell_scores[state][action]
-        green_dec = int(
-            min(255, max(0, (val - self.cell_score_min) * 255.0 / (self.cell_score_max - self.cell_score_min))))
+        green_dec = int(min(255, max(0, (val - self.cell_score_min) * 255.0 / (self.cell_score_max - self.cell_score_min))))
         green = hex(green_dec)[2:]
         red = hex(255 - green_dec)[2:]
         if len(red) == 1:
@@ -105,11 +105,9 @@ class Board:
             if new_x == i and new_y == j:
                 self.score -= self.walk_reward
                 self.score += w
-                if self.score > 0:
-                    print("Finish successfully with score: ", self.score)
-                else:
-                    print("Finish failure with score: ", self.score)
-                self.restart = True
+                if c == "green":
+                    print("Finish with score: ", self.score)
+                    self.restart = True
                 return
 
     def call_up(self):
